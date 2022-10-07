@@ -19,4 +19,6 @@ export const ToolbarFilters = (props: IToolbarFilters) => {
   );
 };
 
-const ToolbarFilterWrapper = styled.div``;
+const ToolbarFilterWrapper = styled.div`
+  width: 125px;
+`;

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { ToolbarButton, ToolbarFilters } from "../components";
-import { todosSlice } from "../features/todos/todos-slice";
+import { todosSlice } from "../redux/features/todos/todos-slice";
 import { customUseSelector, StoreDispatch } from "../types";
 
 export const Toolbar = () => {
@@ -27,13 +27,17 @@ export const Toolbar = () => {
     { label: "High", value: "high" },
   ];
 
+  const showByStatus = (event: ChangeEvent<HTMLSelectElement>) => {
+    dispatch(todosSlice.actions.showByStatus(event.target.value));
+  };
+
   return (
     <ToolbarWrapper>
       <strong>Remaining todos: {count}</strong>
       <ToolbarFilters
         filterCriterion={"Filter By Status"}
         filterOptions={statusFilterOptions}
-        onChange={() => {}}
+        onChange={showByStatus}
       />
       <ToolbarFilters
         filterCriterion={"Filter By Priority"}
@@ -47,8 +51,8 @@ export const Toolbar = () => {
 };
 
 const ToolbarWrapper = styled.div`
-  font-size: 18px;
-  padding: 30px;
+  padding: 20px 0;
   display: flex;
-  gap: 10px;
+  justify-content: space-around;
+  overflow-x: auto;
 `;

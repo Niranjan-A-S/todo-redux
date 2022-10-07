@@ -37,6 +37,7 @@ const TodoItemWrapper = styled.div`
   display: flex;
   padding: 10px;
   gap: 10px;
+  justify-content: space-around;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 `;
 
@@ -52,12 +53,10 @@ const CheckBox = styled.input`
 const TodoName = styled.p`
   font-size: 25px;
   font-weight: lighter;
-  width: 600px;
+  width: 500px;
 `;
 
 const DeleteButton = styled.button`
-  justify-items: flex-end;
-  width: 50px;
   font-size: 20px;
   background-color: #fff;
   border: none;

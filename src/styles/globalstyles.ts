@@ -8,10 +8,9 @@ export const GlobalStyles = createGlobalStyle`
     }
     body{
         font-family: Arial, Helvetica, sans-serif;
-        margin: 0;
-        padding: 0;
         height: 100%;
         background-color: #F5F5F5;
+        position: relative;
     }
     button {
         cursor: pointer;

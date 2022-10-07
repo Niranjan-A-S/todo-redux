@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { customUseSelector, StoreDispatch } from "../types";
 import { TodoItem } from "../components/todo-item";
 import { useDispatch } from "react-redux";
-import { todosSlice } from "../features/todos/todos-slice";
+import { todosSlice } from "../redux/features/todos/todos-slice";
 import { ChangeEvent } from "react";
 
 export const TodosList = () => {
@@ -42,9 +42,8 @@ export const TodosList = () => {
 };
 
 const TodosListWrapper = styled.div`
-  padding: 0 0 20px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   height: 400px;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
 `;

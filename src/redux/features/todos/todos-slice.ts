@@ -1,4 +1,4 @@
-import { ITodosInitialState } from "../../types";
+import { ITodosInitialState } from "../../../types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: ITodosInitialState = {
@@ -48,6 +48,16 @@ export const todosSlice = createSlice({
     },
     clearCompleted: (state) => {
       state.todos = state.todos.filter((todo) => !todo.completed);
+    },
+    showByStatus: (state, action) => {
+      switch (action.payload) {
+        case "active":
+          state.todos = state.todos.filter((todo) => !todo.completed);
+          break;
+        case "finished":
+          state.todos = state.todos.filter((todo) => todo.completed);
+          break;
+      }
     },
   },
 });

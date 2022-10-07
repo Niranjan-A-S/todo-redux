@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { StoreDispatch } from "../types";
-import { todosSlice } from "../features/todos/todos-slice";
+import { todosSlice } from "../redux/features/todos/todos-slice";
 import { InputField } from "../components";
 import { TodosList } from "./todos-list-container";
 import { Toolbar } from "./toolbar-container";
@@ -18,7 +18,8 @@ export const TodosBoard = () => {
 
   const addProject = useCallback(
     (event: { key: string }) => {
-      event.key === "Enter" &&
+      todoName &&
+        event.key === "Enter" &&
         dispatch(todosSlice.actions.added(todoName)) &&
         setTodoName("");
     },
@@ -43,10 +44,11 @@ export const TodosBoard = () => {
 
 const TodosBoardWrapper = styled.div`
   background-color: #fff;
-  margin: 50px 350px 0 350px;
-  height: 580px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   width: 50%;
+  position: absolute;
+  top: 150px;
+  left: 25%;
 `;
 
 const Title = styled.h1`

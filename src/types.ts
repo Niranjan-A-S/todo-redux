@@ -1,6 +1,6 @@
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 
-import { store } from "./reducers/store";
+import { store } from "./redux/store";
 
 export interface ITodosInitialState {
   todos: Array<ITodosDetails>;
