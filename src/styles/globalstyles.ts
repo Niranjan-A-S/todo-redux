@@ -15,8 +15,4 @@ export const GlobalStyles = createGlobalStyle`
     button {
         cursor: pointer;
     }
-
-    select {
-        width:120px
-    }
-    `;
+`;

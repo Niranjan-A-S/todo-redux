@@ -5,7 +5,7 @@ import { SelectField } from "../common";
 interface ITodoItem {
   todoName: string;
   todoID: number;
-  toggleStatus: (todoID: number) => void;
+  toggleStatus: (todoID: number, event: ChangeEvent<HTMLInputElement>) => void;
   deleteTodo: (todoID: number) => void;
   addPriority: (todoID: number, event: ChangeEvent<HTMLSelectElement>) => void;
 }
@@ -22,7 +22,10 @@ export const TodoItem = (props: ITodoItem) => {
 
   return (
     <TodoItemWrapper>
-      <CheckBox onChange={() => toggleStatus(todoID)} type={"checkbox"} />
+      <CheckBox
+        onChange={(event) => toggleStatus(todoID, event)}
+        type={"checkbox"}
+      />
       <TodoName children={todoName} />
       <SelectField
         selectOptions={priorityOptions}

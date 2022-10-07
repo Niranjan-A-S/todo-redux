@@ -8,7 +8,7 @@ interface IToolbarButton {
 export const ToolbarButton = (props: IToolbarButton) => {
   const { text, onClick } = props;
 
-  return <StyledToolbarButton onClick={onClick}>{text}</StyledToolbarButton>;
+  return <StyledToolbarButton onClick={onClick} children={text} />;
 };
 
 const StyledToolbarButton = styled.button`

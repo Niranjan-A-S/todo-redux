@@ -19,9 +19,10 @@ export const todosSlice = createSlice({
         },
       ];
     },
-    statusToggled: (state, action: PayloadAction<number>) => {
+    statusToggled: (state, action: PayloadAction<any>) => {
       state.todos = state.todos.map((todo) =>
-        todo.id === action.payload
+        todo.id === action.payload.id &&
+        todo.completed !== action.payload.completed
           ? {
               ...todo,
               completed: !todo.completed,
@@ -34,7 +35,7 @@ export const todosSlice = createSlice({
         (project) => project.id !== action.payload
       );
     },
-    priorityAdded: (state, action: any) => {
+    priorityAdded: (state, action: PayloadAction<any>) => {
       state.todos = state.todos.map((todo) =>
         todo.id === action.payload.id
           ? { ...todo, priority: action.payload.priority }
@@ -48,16 +49,6 @@ export const todosSlice = createSlice({
     },
     clearCompleted: (state) => {
       state.todos = state.todos.filter((todo) => !todo.completed);
-    },
-    showByStatus: (state, action) => {
-      switch (action.payload) {
-        case "active":
-          state.todos = state.todos.filter((todo) => !todo.completed);
-          break;
-        case "finished":
-          state.todos = state.todos.filter((todo) => todo.completed);
-          break;
-      }
     },
   },
 });

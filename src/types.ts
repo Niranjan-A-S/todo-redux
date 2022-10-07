@@ -12,6 +12,11 @@ export interface ITodosDetails {
   completed: boolean;
 }
 
+export interface IOption {
+  label: string;
+  value: string;
+}
+
 export type RootState = ReturnType<typeof store.getState>;
 
 export type StoreDispatch = typeof store.dispatch;

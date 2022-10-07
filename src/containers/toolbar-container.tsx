@@ -1,12 +1,29 @@
-import React, { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { ToolbarButton, ToolbarFilters } from "../components";
+import { SelectField } from "../common";
+import { ToolbarButton } from "../components";
 import { todosSlice } from "../redux/features/todos/todos-slice";
 import { customUseSelector, StoreDispatch } from "../types";
 
+const statusFilterOptions = [
+  { label: "All", value: "all" },
+  { label: "Active", value: "active" },
+  { label: "Completed", value: "completed" },
+];
+
+const priorityFilterOptions = [
+  { label: "All", value: "all" },
+  { label: "Low", value: "low" },
+  { label: "Moderate", value: "moderate" },
+  { label: "High", value: "high" },
+];
+
 export const Toolbar = () => {
-  const count = customUseSelector((state) => state.todo.todos.length);
+  const count = customUseSelector(
+    (state) => state.todo.todos.filter((todo) => !todo.completed).length
+  );
+
+  const suffix = count === 1 ? "" : "s";
 
   const dispatch = useDispatch<StoreDispatch>();
 
@@ -14,45 +31,42 @@ export const Toolbar = () => {
 
   const clearCompleted = () => dispatch(todosSlice.actions.clearCompleted());
 
-  const statusFilterOptions = [
-    { label: "Show All", value: "all" },
-    { label: "Active", value: "active" },
-    { label: "Finished", value: "finished" },
-  ];
-
-  const priorityFilterOptions = [
-    { label: "Show All", value: "" },
-    { label: "Low", value: "low" },
-    { label: "Moderate", value: "moderate" },
-    { label: "High", value: "high" },
-  ];
-
-  const showByStatus = (event: ChangeEvent<HTMLSelectElement>) => {
-    dispatch(todosSlice.actions.showByStatus(event.target.value));
-  };
-
   return (
     <ToolbarWrapper>
-      <strong>Remaining todos: {count}</strong>
-      <ToolbarFilters
-        filterCriterion={"Filter By Status"}
-        filterOptions={statusFilterOptions}
-        onChange={showByStatus}
-      />
-      <ToolbarFilters
-        filterCriterion={"Filter By Priority"}
-        filterOptions={priorityFilterOptions}
-        onChange={() => {}}
-      />
-      <ToolbarButton text={"Mark All Finished"} onClick={markAllCompleted} />
-      <ToolbarButton text={"Clear Finished"} onClick={clearCompleted} />
+      <ToolsWrapper>
+        <strong>Actions</strong>
+        <ToolbarButton text={"Mark All Finished"} onClick={markAllCompleted} />
+        <ToolbarButton text={"Clear Finished"} onClick={clearCompleted} />
+      </ToolsWrapper>
+      <ToolsWrapper>
+        <strong>Remaining Todos</strong>
+        <p>
+          <strong>{count}</strong> item{suffix} left
+        </p>
+      </ToolsWrapper>
+      <ToolsWrapper>
+        <strong>Filter by Status</strong>
+        <SelectField selectOptions={statusFilterOptions} />
+      </ToolsWrapper>
+      <ToolsWrapper>
+        <strong>Filter by Priority</strong>
+        <SelectField selectOptions={priorityFilterOptions} />
+      </ToolsWrapper>
     </ToolbarWrapper>
   );
 };
 
 const ToolbarWrapper = styled.div`
-  padding: 20px 0;
+  padding: 10px 0;
   display: flex;
   justify-content: space-around;
   overflow-x: auto;
+  height: 130px;
+`;
+
+const ToolsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 10px;
 `;

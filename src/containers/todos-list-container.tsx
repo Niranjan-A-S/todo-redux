@@ -1,18 +1,27 @@
+import { ChangeEvent } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { customUseSelector, StoreDispatch } from "../types";
 import { TodoItem } from "../components/todo-item";
-import { useDispatch } from "react-redux";
 import { todosSlice } from "../redux/features/todos/todos-slice";
-import { ChangeEvent } from "react";
 
 export const TodosList = () => {
   const todosArray = customUseSelector((state) => state.todo.todos);
 
   const dispatch = useDispatch<StoreDispatch>();
 
-  const toggleStatus = (todoID: number) =>
-    dispatch(todosSlice.actions.statusToggled(todoID));
+  const toggleStatus = (
+    todoID: number,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    dispatch(
+      todosSlice.actions.statusToggled({
+        id: todoID,
+        completed: event.target.checked,
+      })
+    );
+  };
 
   const deleteTodo = (todoID: number) =>
     dispatch(todosSlice.actions.deleted(todoID));
@@ -43,7 +52,7 @@ export const TodosList = () => {
 
 const TodosListWrapper = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  height: 400px;
+  height: 350px;
   overflow-x: auto;
   overflow-y: auto;
 `;
