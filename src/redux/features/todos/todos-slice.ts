@@ -50,15 +50,5 @@ export const todosSlice = createSlice({
     clearCompleted: (state) => {
       state.todos = state.todos.filter((todo) => !todo.completed);
     },
-    statusFiltered: (state, action: PayloadAction<string>) => {
-      state.todos =
-        action.payload === "all"
-          ? state.todos
-          : action.payload === "active"
-          ? state.todos.filter((todo) => !todo.completed)
-          : action.payload === "completed"
-          ? state.todos.filter((todo) => todo.completed)
-          : state.todos;
-    },
   },
 });

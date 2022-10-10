@@ -3,10 +3,10 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import { StoreDispatch } from "../types";
-import { todosSlice } from "../redux/features/todos/todos-slice";
 import { InputField } from "../components";
 import { TodosList } from "./todos-list-container";
 import { ToolbarContainer } from "./toolbar-container";
+import { todosSlice } from "../redux/features/todos/todos-slice";
 
 export const TodosContainer = () => {
   const [todoName, setTodoName] = useState<string>("");

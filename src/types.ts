@@ -17,6 +17,17 @@ export interface IOption {
   value: string;
 }
 
+export interface IFiltersInitialState {
+  statusFilter: string;
+  priorityFilter: IPriorityFilters;
+}
+
+interface IPriorityFilters {
+  low: boolean;
+  moderate: boolean;
+  high: boolean;
+}
+
 export type RootState = ReturnType<typeof store.getState>;
 
 export type StoreDispatch = typeof store.dispatch;

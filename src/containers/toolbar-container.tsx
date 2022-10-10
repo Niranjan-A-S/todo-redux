@@ -4,20 +4,14 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { SelectField } from "../common";
 import { ToolbarButton } from "../components";
+import { filterSlice } from "../redux/features/filters/filter-slice";
 import { todosSlice } from "../redux/features/todos/todos-slice";
 import { customUseSelector, StoreDispatch } from "../types";
 
 const statusFilterOptions = [
   { label: "All", value: "all" },
-  { label: "Active", value: "active" },
+  { label: "Remaining", value: "remaining" },
   { label: "Completed", value: "completed" },
-];
-
-const priorityFilterOptions = [
-  { label: "All", value: "all" },
-  { label: "Low", value: "low" },
-  { label: "Moderate", value: "moderate" },
-  { label: "High", value: "high" },
 ];
 
 export const ToolbarContainer = memo(() => {
@@ -25,9 +19,19 @@ export const ToolbarContainer = memo(() => {
     (state) => state.todo.todos.filter((todo) => !todo.completed).length
   );
 
+  // const priorityFilterDisplayCondition = customUseSelector(
+  //   (state) => state.filter.priorityFilter
+  // );
+
   const dispatch = useDispatch<StoreDispatch>();
 
   const suffix = completedTodosCount === 1 ? "" : "s";
+
+  const priorityFilters = [
+    { id: 1, label: "Low", value: "low", color: "#2192FF" },
+    { id: 2, label: "Moderate", value: "moderate", color: "#38E54D" },
+    { id: 3, label: "High", value: "high", color: "#FF1E00" },
+  ];
 
   const markAllCompleted = useCallback(() => {
     dispatch(todosSlice.actions.markCompleted());
@@ -39,11 +43,14 @@ export const ToolbarContainer = memo(() => {
   );
 
   const filterByStatus = useCallback(
-    (event: ChangeEvent<HTMLSelectElement>) => {
-      dispatch(todosSlice.actions.statusFiltered(event.target.value));
-    },
+    (event: ChangeEvent<HTMLSelectElement>) =>
+      dispatch(filterSlice.actions.toggleStatus(event.target.value)),
     [dispatch]
   );
+
+  const toggleDisplayConditions = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.checked);
+  };
 
   return (
     <ToolbarWrapper>
@@ -67,7 +74,14 @@ export const ToolbarContainer = memo(() => {
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Priority</strong>
-        <SelectField selectOptions={priorityFilterOptions} />
+        {priorityFilters.map((priority, index) => (
+          <FilterWrapper key={index}>
+            <label style={{ color: priority.color }}>
+              <strong>{priority.label}</strong>
+            </label>
+            <input type={"checkbox"} onChange={toggleDisplayConditions} />
+          </FilterWrapper>
+        ))}
       </ToolsWrapper>
     </ToolbarWrapper>
   );
@@ -86,4 +100,9 @@ const ToolsWrapper = styled.div`
   flex-direction: column;
   text-align: center;
   gap: 10px;
+`;
+
+const FilterWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;

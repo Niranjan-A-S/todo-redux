@@ -1,14 +1,30 @@
-import { ChangeEvent, memo } from "react";
+import { useCallback, ChangeEvent, memo } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import { customUseSelector, StoreDispatch } from "../types";
+import { customUseSelector, ITodosDetails, StoreDispatch } from "../types";
 import { TodoItem } from "../components/todo-item";
 import { todosSlice } from "../redux/features/todos/todos-slice";
-import { useCallback } from "react";
 
 export const TodosList = memo(() => {
+  const completedStatus = customUseSelector(
+    (state) => state.filter.statusFilter
+  );
+
   const todosArray = customUseSelector((state) => state.todo.todos);
+
+  const filterTodos = useCallback(() => {
+    switch (completedStatus) {
+      case "completed":
+        return todosArray.filter((todo) => todo.completed);
+      case "remaining":
+        return todosArray.filter((todo) => !todo.completed);
+      default:
+        return todosArray;
+    }
+  }, [completedStatus, todosArray]);
+
+  const filteredArray: ITodosDetails[] = filterTodos();
 
   const dispatch = useDispatch<StoreDispatch>();
 
@@ -41,7 +57,7 @@ export const TodosList = memo(() => {
 
   return (
     <TodosListWrapper>
-      {todosArray.map((todo) => (
+      {filteredArray.map((todo: ITodosDetails) => (
         <TodoItem
           key={todo.id}
           todoName={todo.name}
