@@ -8,10 +8,12 @@ interface ITodoItem {
   toggleStatus: (todoID: number, event: ChangeEvent<HTMLInputElement>) => void;
   deleteTodo: (todoID: number) => void;
   addPriority: (todoID: number, event: ChangeEvent<HTMLSelectElement>) => void;
+  checked: boolean;
 }
 
 export const TodoItem = (props: ITodoItem) => {
-  const { todoName, todoID, toggleStatus, deleteTodo, addPriority } = props;
+  const { todoName, todoID, toggleStatus, deleteTodo, addPriority, checked } =
+    props;
 
   const priorityOptions = [
     { label: "Choose Priority", value: "" },
@@ -25,6 +27,7 @@ export const TodoItem = (props: ITodoItem) => {
       <CheckBox
         onChange={(event) => toggleStatus(todoID, event)}
         type={"checkbox"}
+        checked={checked}
       />
       <TodoName children={todoName} />
       <SelectField

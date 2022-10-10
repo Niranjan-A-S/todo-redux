@@ -1,16 +1,17 @@
-import { ChangeEventHandler } from "react";
+import { ChangeEvent } from "react";
 import { IOption } from "../types";
 
 interface ISelectOptions {
   selectOptions: Array<IOption>;
-  onChange?: ChangeEventHandler<HTMLSelectElement>;
+  onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
+  value?: string;
 }
 
 export const SelectField = (props: ISelectOptions) => {
-  const { selectOptions, onChange } = props;
+  const { selectOptions, onChange, value } = props;
 
   return (
-    <select defaultValue={selectOptions[0].value} onChange={onChange}>
+    <select value={value} onChange={onChange}>
       {selectOptions.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}

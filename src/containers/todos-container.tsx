@@ -6,9 +6,9 @@ import { StoreDispatch } from "../types";
 import { todosSlice } from "../redux/features/todos/todos-slice";
 import { InputField } from "../components";
 import { TodosList } from "./todos-list-container";
-import { Toolbar } from "./toolbar-container";
+import { ToolbarContainer } from "./toolbar-container";
 
-export const TodosBoard = () => {
+export const TodosContainer = () => {
   const [todoName, setTodoName] = useState<string>("");
 
   const dispatch = useDispatch<StoreDispatch>();
@@ -29,20 +29,20 @@ export const TodosBoard = () => {
   return (
     <>
       <Title children={"Things to be done..."} />
-      <TodosBoardWrapper>
+      <TodosContainerStyled>
         <InputField
           value={todoName}
           onChange={handleChange}
           onKeyDown={addProject}
         />
         <TodosList />
-        <Toolbar />
-      </TodosBoardWrapper>
+        <ToolbarContainer />
+      </TodosContainerStyled>
     </>
   );
 };
 
-const TodosBoardWrapper = styled.div`
+const TodosContainerStyled = styled.div`
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   width: 50%;

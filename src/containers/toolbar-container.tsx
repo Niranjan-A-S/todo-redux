@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+import { ChangeEvent, memo } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { SelectField } from "../common";
@@ -18,18 +20,30 @@ const priorityFilterOptions = [
   { label: "High", value: "high" },
 ];
 
-export const Toolbar = () => {
-  const count = customUseSelector(
+export const ToolbarContainer = memo(() => {
+  const completedTodosCount = customUseSelector(
     (state) => state.todo.todos.filter((todo) => !todo.completed).length
   );
 
-  const suffix = count === 1 ? "" : "s";
-
   const dispatch = useDispatch<StoreDispatch>();
 
-  const markAllCompleted = () => dispatch(todosSlice.actions.markCompleted());
+  const suffix = completedTodosCount === 1 ? "" : "s";
 
-  const clearCompleted = () => dispatch(todosSlice.actions.clearCompleted());
+  const markAllCompleted = useCallback(() => {
+    dispatch(todosSlice.actions.markCompleted());
+  }, [dispatch]);
+
+  const clearCompleted = useCallback(
+    () => dispatch(todosSlice.actions.clearCompleted()),
+    [dispatch]
+  );
+
+  const filterByStatus = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      dispatch(todosSlice.actions.statusFiltered(event.target.value));
+    },
+    [dispatch]
+  );
 
   return (
     <ToolbarWrapper>
@@ -41,12 +55,15 @@ export const Toolbar = () => {
       <ToolsWrapper>
         <strong>Remaining Todos</strong>
         <p>
-          <strong>{count}</strong> item{suffix} left
+          <strong>{completedTodosCount}</strong> item{suffix} left
         </p>
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Status</strong>
-        <SelectField selectOptions={statusFilterOptions} />
+        <SelectField
+          selectOptions={statusFilterOptions}
+          onChange={filterByStatus}
+        />
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Priority</strong>
@@ -54,7 +71,7 @@ export const Toolbar = () => {
       </ToolsWrapper>
     </ToolbarWrapper>
   );
-};
+});
 
 const ToolbarWrapper = styled.div`
   padding: 10px 0;
