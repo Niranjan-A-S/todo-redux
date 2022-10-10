@@ -48,7 +48,10 @@ export const ToolbarContainer = memo(() => {
     [dispatch]
   );
 
-  const toggleDisplayConditions = (event: ChangeEvent<HTMLInputElement>) => {
+  const toggleDisplayConditions = (
+    event: ChangeEvent<HTMLInputElement>,
+    id: number
+  ) => {
     console.log(event.target.checked);
   };
 
@@ -79,7 +82,10 @@ export const ToolbarContainer = memo(() => {
             <label style={{ color: priority.color }}>
               <strong>{priority.label}</strong>
             </label>
-            <input type={"checkbox"} onChange={toggleDisplayConditions} />
+            <input
+              type={"checkbox"}
+              onChange={(event) => toggleDisplayConditions(event, priority.id)}
+            />
           </FilterWrapper>
         ))}
       </ToolsWrapper>
