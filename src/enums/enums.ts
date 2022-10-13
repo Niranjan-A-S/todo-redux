@@ -1,4 +1,4 @@
-export const TITLE = "Things to be done..."
+export const TITLE = "Todoeux"
 
 export enum PriorityOptionLabels  {
     DEFAULT="Choose Priority",
