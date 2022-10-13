@@ -1,6 +1,6 @@
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 
-import { store } from "./redux/store";
+import { store } from "../redux/store";
 
 export interface ITodosInitialState {
   todos: Array<ITodosDetails>;
@@ -10,6 +10,7 @@ export interface ITodosDetails {
   id: number;
   name: string;
   completed: boolean;
+  priority:string;
 }
 
 export interface IOption {
@@ -19,14 +20,10 @@ export interface IOption {
 
 export interface IFiltersInitialState {
   statusFilter: string;
-  priorityFilter: IPriorityFilters;
+  priorityFilter: Array<string>;
 }
 
-interface IPriorityFilters {
-  low: boolean;
-  moderate: boolean;
-  high: boolean;
-}
+
 
 export type RootState = ReturnType<typeof store.getState>;
 

@@ -1,5 +1,6 @@
-import { ITodosInitialState } from "../../../types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import { ITodosInitialState } from "../../../types";
 
 const initialState: ITodosInitialState = {
   todos: [],
@@ -16,6 +17,7 @@ export const todosSlice = createSlice({
           id: state.todos.length + 1,
           name: action.payload,
           completed: false,
+          priority:""
         },
       ];
     },

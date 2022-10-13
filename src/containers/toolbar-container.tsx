@@ -1,17 +1,24 @@
-import { useCallback } from "react";
-import { ChangeEvent, memo } from "react";
+import { ChangeEvent, memo, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+
 import { SelectField } from "../common";
 import { ToolbarButton } from "../components";
+import {
+  PriorityOptionColors,
+  PriorityOptionLabels,
+  PriorityOptionValues,
+  StatusOptionLabels,
+  StatusOptionValues,
+} from "../enums";
 import { filterSlice } from "../redux/features/filters/filter-slice";
 import { todosSlice } from "../redux/features/todos/todos-slice";
 import { customUseSelector, StoreDispatch } from "../types";
 
 const statusFilterOptions = [
-  { label: "All", value: "all" },
-  { label: "Remaining", value: "remaining" },
-  { label: "Completed", value: "completed" },
+  { label: StatusOptionLabels.ALL, value: StatusOptionValues.ALL },
+  { label: StatusOptionLabels.REMAINING, value: StatusOptionValues.REMAINING },
+  { label: StatusOptionLabels.COMPLETED, value: StatusOptionValues.COMPLETED },
 ];
 
 export const ToolbarContainer = memo(() => {
@@ -19,18 +26,22 @@ export const ToolbarContainer = memo(() => {
     (state) => state.todo.todos.filter((todo) => !todo.completed).length
   );
 
-  // const priorityFilterDisplayCondition = customUseSelector(
-  //   (state) => state.filter.priorityFilter
-  // );
-
   const dispatch = useDispatch<StoreDispatch>();
 
   const suffix = completedTodosCount === 1 ? "" : "s";
 
   const priorityFilters = [
-    { id: 1, label: "Low", value: "low", color: "#2192FF" },
-    { id: 2, label: "Moderate", value: "moderate", color: "#38E54D" },
-    { id: 3, label: "High", value: "high", color: "#FF1E00" },
+    { id: 1, label: PriorityOptionLabels.LOW, color: PriorityOptionColors.LOW },
+    {
+      id: 2,
+      label: PriorityOptionLabels.MODERATE,
+      color: PriorityOptionColors.MODERATE,
+    },
+    {
+      id: 3,
+      label: PriorityOptionLabels.HIGH,
+      color: PriorityOptionColors.HIGH,
+    },
   ];
 
   const markAllCompleted = useCallback(() => {
@@ -48,12 +59,50 @@ export const ToolbarContainer = memo(() => {
     [dispatch]
   );
 
-  const toggleDisplayConditions = (
-    event: ChangeEvent<HTMLInputElement>,
-    id: number
-  ) => {
-    console.log(event.target.checked);
-  };
+  const addPriorityFilters = useCallback(
+    (event: ChangeEvent<HTMLInputElement>, label: string) => {
+      switch (label) {
+        case PriorityOptionLabels.LOW:
+          event.target.checked
+            ? dispatch(
+                filterSlice.actions.addPriorityFilters(PriorityOptionValues.LOW)
+              )
+            : dispatch(
+                filterSlice.actions.removePriorityFilters(
+                  PriorityOptionValues.LOW
+                )
+              );
+          break;
+        case PriorityOptionLabels.MODERATE:
+          event.target.checked
+            ? dispatch(
+                filterSlice.actions.addPriorityFilters(
+                  PriorityOptionValues.MODERATE
+                )
+              )
+            : dispatch(
+                filterSlice.actions.removePriorityFilters(
+                  PriorityOptionValues.MODERATE
+                )
+              );
+          break;
+        case PriorityOptionLabels.HIGH:
+          event.target.checked
+            ? dispatch(
+                filterSlice.actions.addPriorityFilters(
+                  PriorityOptionValues.HIGH
+                )
+              )
+            : dispatch(
+                filterSlice.actions.removePriorityFilters(
+                  PriorityOptionValues.HIGH
+                )
+              );
+          break;
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <ToolbarWrapper>
@@ -77,17 +126,18 @@ export const ToolbarContainer = memo(() => {
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Priority</strong>
-        {priorityFilters.map((priority, index) => (
-          <FilterWrapper key={index}>
-            <label style={{ color: priority.color }}>
-              <strong>{priority.label}</strong>
-            </label>
-            <input
-              type={"checkbox"}
-              onChange={(event) => toggleDisplayConditions(event, priority.id)}
-            />
-          </FilterWrapper>
-        ))}
+        {priorityFilters.map((priority) => {
+          return (
+            <FilterWrapper key={priority.id}>
+              <label style={{ color: priority.color }}>{priority.label}</label>
+              <input
+                key={priority.label}
+                type={"checkbox"}
+                onChange={(event) => addPriorityFilters(event, priority.label)}
+              />
+            </FilterWrapper>
+          );
+        })}
       </ToolsWrapper>
     </ToolbarWrapper>
   );

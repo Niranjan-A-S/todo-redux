@@ -2,9 +2,9 @@ import { useCallback, ChangeEvent, memo } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import { customUseSelector, ITodosDetails, StoreDispatch } from "../types";
-import { TodoItem } from "../components/todo-item";
+import { TodoItem } from "../components";
 import { todosSlice } from "../redux/features/todos/todos-slice";
+import { customUseSelector, StoreDispatch, ITodosDetails } from "../types";
 
 export const TodosList = memo(() => {
   const completedStatus = customUseSelector(
@@ -12,8 +12,13 @@ export const TodosList = memo(() => {
   );
 
   const todosArray = customUseSelector((state) => state.todo.todos);
+  debugger;
 
-  const filterTodos = useCallback(() => {
+  const priorityFilters = customUseSelector(
+    (state) => state.filter.priorityFilter
+  );
+
+  const filterTodosByStatus = useCallback(() => {
     switch (completedStatus) {
       case "completed":
         return todosArray.filter((todo) => todo.completed);
@@ -24,7 +29,18 @@ export const TodosList = memo(() => {
     }
   }, [completedStatus, todosArray]);
 
-  const filteredArray: ITodosDetails[] = filterTodos();
+  const filteredArrayByStatus = filterTodosByStatus();
+
+  const filterArrayByPriority = useCallback(() => {
+    if (!priorityFilters.length) {
+      return filteredArrayByStatus;
+    }
+    return filteredArrayByStatus.filter((a) =>
+      priorityFilters.includes(a.priority)
+    );
+  }, [filteredArrayByStatus, priorityFilters]);
+
+  const filteredArray = filterArrayByPriority();
 
   const dispatch = useDispatch<StoreDispatch>();
 
@@ -66,6 +82,7 @@ export const TodosList = memo(() => {
           deleteTodo={deleteTodo}
           addPriority={addPriority}
           checked={todo.completed}
+          priorityValue={todo.priority}
         />
       ))}
     </TodosListWrapper>

@@ -1,19 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { IFiltersInitialState } from "./../../../types";
+import { IFiltersInitialState } from "../../../types";
 
 const initialState: IFiltersInitialState = {
   statusFilter: "all",
-  priorityFilter: { low: false, moderate: false, high: false },
+  priorityFilter: []
 };
 
 export const filterSlice = createSlice({
   name: "filter",
   initialState,
   reducers: {
-    toggleStatus: (state, action) => {
+    toggleStatus: (state, action:PayloadAction<string>) => {
       state.statusFilter = action.payload;
     },
-    togglePriorityDisplayCondition: (state, action: PayloadAction<any>) => {},
+  addPriorityFilters:( state,action:PayloadAction<string>) => {
+    state.priorityFilter = !state.priorityFilter.includes(action.payload) ? [...state.priorityFilter,action.payload] : state.priorityFilter 
+  },
+  removePriorityFilters:(state,action:PayloadAction<string>) => {
+    state.priorityFilter = state.priorityFilter.includes(action.payload) ? state.priorityFilter.filter(item => item !== action.payload )  :state.priorityFilter
+  }
   },
 });

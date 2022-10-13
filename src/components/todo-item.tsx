@@ -1,6 +1,8 @@
 import { ChangeEvent } from "react";
 import styled from "styled-components";
+
 import { SelectField } from "../common";
+import { PriorityOptionLabels, PriorityOptionValues } from "../enums";
 
 interface ITodoItem {
   todoName: string;
@@ -9,17 +11,28 @@ interface ITodoItem {
   deleteTodo: (todoID: number) => void;
   addPriority: (todoID: number, event: ChangeEvent<HTMLSelectElement>) => void;
   checked: boolean;
+  priorityValue: string;
 }
 
 export const TodoItem = (props: ITodoItem) => {
-  const { todoName, todoID, toggleStatus, deleteTodo, addPriority, checked } =
-    props;
+  const {
+    todoName,
+    todoID,
+    toggleStatus,
+    deleteTodo,
+    addPriority,
+    checked,
+    priorityValue,
+  } = props;
 
   const priorityOptions = [
-    { label: "Choose Priority", value: "" },
-    { label: "Low", value: "low" },
-    { label: "Moderate", value: "moderate" },
-    { label: "High", value: "high" },
+    { label: PriorityOptionLabels.DEFAULT, value: "" },
+    { label: PriorityOptionLabels.LOW, value: PriorityOptionValues.LOW },
+    {
+      label: PriorityOptionLabels.MODERATE,
+      value: PriorityOptionValues.MODERATE,
+    },
+    { label: PriorityOptionLabels.HIGH, value: PriorityOptionValues.HIGH },
   ];
 
   return (
@@ -33,6 +46,7 @@ export const TodoItem = (props: ITodoItem) => {
       <SelectField
         selectOptions={priorityOptions}
         onChange={(event) => addPriority(todoID, event)}
+        value={priorityValue}
       />
       <DeleteButton children={"❌"} onClick={() => deleteTodo(todoID)} />
     </TodoItemWrapper>

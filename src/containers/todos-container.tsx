@@ -2,11 +2,11 @@ import { ChangeEvent, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import { StoreDispatch } from "../types";
+import { TodosList, ToolbarContainer } from ".";
 import { InputField } from "../components";
-import { TodosList } from "./todos-list-container";
-import { ToolbarContainer } from "./toolbar-container";
+import { TITLE } from "../enums";
 import { todosSlice } from "../redux/features/todos/todos-slice";
+import { StoreDispatch } from "../types";
 
 export const TodosContainer = () => {
   const [todoName, setTodoName] = useState<string>("");
@@ -28,7 +28,7 @@ export const TodosContainer = () => {
 
   return (
     <>
-      <Title children={"Things to be done..."} />
+      <Title children={TITLE} />
       <TodosContainerStyled>
         <InputField
           value={todoName}
