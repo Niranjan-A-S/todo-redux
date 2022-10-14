@@ -11,23 +11,24 @@ import {
   StatusOptionLabels,
   StatusOptionValues,
 } from "../enums";
-
+import { customUseSelector, StoreDispatch } from "../redux";
 import {
-  toggleStatus,
-  addPriorityFilters,
-  removePriorityFilters,
+  priorityFiltersAdded,
+  priorityFiltersRemoved,
+  statusToggled,
 } from "../redux/features/filters";
 
-import { markCompleted } from "../redux/features/todos";
-import { customUseSelector, StoreDispatch } from "../types";
+import { clearCompleted, markCompleted } from "../redux/features/todos";
 
 export const Toolbar = memo(() => {
-  const completedTodosCount = customUseSelector(
-    (state) => state.todo.todos.filter((todo) => !todo.completed).length
-  );
-
   const dispatch = useDispatch<StoreDispatch>();
+  const state = customUseSelector((state) => state);
 
+  const {
+    todo: { todos },
+  } = state;
+
+  const completedTodosCount = todos.length;
   const suffix = completedTodosCount === 1 ? "" : "s";
 
   const priorityFilters = [
@@ -63,25 +64,25 @@ export const Toolbar = memo(() => {
     },
   ];
 
-  const markAllCompleted = useCallback(() => {
+  const handleSubmitMark = useCallback(() => {
     dispatch(markCompleted());
   }, [dispatch]);
 
-  const clearCompleted = useCallback(() => {
+  const handleSubmitClear = useCallback(() => {
     dispatch(clearCompleted());
   }, [dispatch]);
 
-  const addStatusFilter = useCallback(
+  const toggleStatus = useCallback(
     (event: ChangeEvent<HTMLSelectElement>) =>
-      dispatch(toggleStatus(event.target.value)),
+      dispatch(statusToggled(event.target.value)),
     [dispatch]
   );
 
-  const addPriorityFilters = useCallback(
+  const togglePriority = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       event.target.checked
-        ? dispatch(addPriorityFilters(event.target.value))
-        : dispatch(removePriorityFilters(event.target.value));
+        ? dispatch(priorityFiltersAdded(event.target.value))
+        : dispatch(priorityFiltersRemoved(event.target.value));
     },
     [dispatch]
   );
@@ -90,8 +91,8 @@ export const Toolbar = memo(() => {
     <ToolbarContainer>
       <ToolsWrapper>
         <strong>Actions</strong>
-        <ToolbarButton text={"Mark All Finished"} onClick={markAllCompleted} />
-        <ToolbarButton text={"Clear Finished"} onClick={clearCompleted} />
+        <ToolbarButton text={"Mark All Finished"} onClick={handleSubmitMark} />
+        <ToolbarButton text={"Clear Finished"} onClick={handleSubmitClear} />
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Remaining Todos</strong>
@@ -101,7 +102,7 @@ export const Toolbar = memo(() => {
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Status</strong>
-        <SelectField selectOptions={statusFilters} onChange={addStatusFilter} />
+        <SelectField selectOptions={statusFilters} onChange={toggleStatus} />
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Priority</strong>
@@ -113,7 +114,7 @@ export const Toolbar = memo(() => {
                 value={priority.value}
                 key={priority.label}
                 type={"checkbox"}
-                onChange={addPriorityFilters}
+                onChange={togglePriority}
               />
             </FilterWrapper>
           );

@@ -5,18 +5,18 @@ import { TodoList, Toolbar } from ".";
 
 import { InputField } from "../components";
 import { TITLE } from "../enums";
+import { StoreDispatch } from "../redux";
 import { added } from "../redux/features/todos";
-import { StoreDispatch } from "../types";
 
 export const TodosContainer = () => {
-  const [todoName, setTodoName] = useState<string>("");
-
   const dispatch = useDispatch<StoreDispatch>();
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
+  const [todoName, setTodoName] = useState<string>("");
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) =>
     setTodoName(event.target.value);
 
-  const addProject = useCallback(
+  const handleKeyDown = useCallback(
     (event: { key: string }) => {
       todoName &&
         event.key === "Enter" &&
@@ -32,8 +32,8 @@ export const TodosContainer = () => {
       <TodosContainerStyled>
         <InputField
           value={todoName}
-          onChange={handleChange}
-          onKeyDown={addProject}
+          onChange={handleNameChange}
+          onKeyDown={handleKeyDown}
         />
         <TodoList />
         <Toolbar />

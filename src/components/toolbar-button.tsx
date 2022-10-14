@@ -1,8 +1,7 @@
 import styled from "styled-components";
-
 interface IToolbarButton {
   text: string;
-  onClick?(): void;
+  onClick(): void;
 }
 
 export const ToolbarButton = (props: IToolbarButton) => {

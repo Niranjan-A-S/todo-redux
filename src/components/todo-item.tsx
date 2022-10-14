@@ -7,9 +7,15 @@ import { PriorityOptionLabels, PriorityOptionValues } from "../enums";
 interface ITodoItem {
   todoName: string;
   todoID: number;
-  toggleStatus: (todoID: number, event: ChangeEvent<HTMLInputElement>) => void;
-  deleteTodo: (todoID: number) => void;
-  addPriority: (todoID: number, event: ChangeEvent<HTMLSelectElement>) => void;
+  handleStatusChange: (
+    todoID: number,
+    event: ChangeEvent<HTMLInputElement>
+  ) => void;
+  handleClick: (todoID: number) => void;
+  handlePriorityChange: (
+    todoID: number,
+    event: ChangeEvent<HTMLSelectElement>
+  ) => void;
   checked: boolean;
   priorityValue: string;
 }
@@ -18,9 +24,9 @@ export const TodoItem = (props: ITodoItem) => {
   const {
     todoName,
     todoID,
-    toggleStatus,
-    deleteTodo,
-    addPriority,
+    handleStatusChange,
+    handleClick,
+    handlePriorityChange,
     checked,
     priorityValue,
   } = props;
@@ -38,17 +44,17 @@ export const TodoItem = (props: ITodoItem) => {
   return (
     <TodoItemWrapper>
       <CheckBox
-        onChange={(event) => toggleStatus(todoID, event)}
+        onChange={(event) => handleStatusChange(todoID, event)}
         type={"checkbox"}
         checked={checked}
       />
       <TodoName children={todoName} />
       <SelectField
         selectOptions={priorityOptions}
-        onChange={(event) => addPriority(todoID, event)}
+        onChange={(event) => handlePriorityChange(todoID, event)}
         value={priorityValue}
       />
-      <DeleteButton children={"❌"} onClick={() => deleteTodo(todoID)} />
+      <DeleteButton children={"❌"} onClick={() => handleClick(todoID)} />
     </TodoItemWrapper>
   );
 };

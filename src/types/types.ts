@@ -22,9 +22,3 @@ export interface IFiltersInitialState {
   statusFilter: string;
   priorityFilters: Array<string>;
 }
-
-export type RootState = ReturnType<typeof store.getState>;
-
-export type StoreDispatch = typeof store.dispatch;
-
-export const customUseSelector: TypedUseSelectorHook<RootState> = useSelector;

@@ -2,14 +2,14 @@ import { useCallback, ChangeEvent, memo } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { TodoItem } from "../components";
+import { customUseSelector, StoreDispatch } from "../redux";
 
 import { deleted, priorityAdded, statusToggled } from "../redux/features/todos";
-
-import { customUseSelector, StoreDispatch, ITodosDetails } from "../types";
+import { ITodosDetails } from "../types";
 
 export const TodoList = memo(() => {
-  const state = customUseSelector((state) => state);
   const dispatch = useDispatch<StoreDispatch>();
+  const state = customUseSelector((state) => state);
 
   const {
     filter: { priorityFilters, statusFilter },
@@ -66,11 +66,11 @@ export const TodoList = memo(() => {
       {filterByPriority().map((todo: ITodosDetails) => (
         <TodoItem
           key={todo.id}
-          todoName={todo.name}
-          toggleStatus={toggleStatus}
           todoID={todo.id}
-          deleteTodo={deleteTodo}
-          addPriority={addPriority}
+          todoName={todo.name}
+          handleStatusChange={toggleStatus}
+          handlePriorityChange={addPriority}
+          handleClick={deleteTodo}
           checked={todo.completed}
           priorityValue={todo.priority}
         />
