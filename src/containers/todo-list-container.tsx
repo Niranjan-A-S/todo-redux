@@ -1,48 +1,43 @@
 import { useCallback, ChangeEvent, memo } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-
 import { TodoItem } from "../components";
-import { todosSlice } from "../redux/features/todos/todos-slice";
+
+import { deleted, priorityAdded, statusToggled } from "../redux/features/todos";
+
 import { customUseSelector, StoreDispatch, ITodosDetails } from "../types";
 
 export const TodoList = memo(() => {
-  const todosArray = customUseSelector((state) => state.todo.todos);
-
-  const filters = customUseSelector((state) => state.filter);
-
-  const { priorityFilters, statusFilter } = filters;
-
-  const filterTodosByStatus = useCallback(() => {
-    switch (statusFilter) {
-      case "completed":
-        return todosArray.filter((todo) => todo.completed);
-      case "remaining":
-        return todosArray.filter((todo) => !todo.completed);
-      default:
-        return todosArray;
-    }
-  }, [statusFilter, todosArray]);
-
-  const filteredArrayByStatus = filterTodosByStatus();
-
-  const filterArrayByPriority = useCallback(() => {
-    if (!priorityFilters.length) {
-      return filteredArrayByStatus;
-    }
-    return filteredArrayByStatus.filter((a) =>
-      priorityFilters.includes(a.priority)
-    );
-  }, [filteredArrayByStatus, priorityFilters]);
-
-  const filteredArray = filterArrayByPriority();
-
+  const state = customUseSelector((state) => state);
   const dispatch = useDispatch<StoreDispatch>();
+
+  const {
+    filter: { priorityFilters, statusFilter },
+    todo: { todos },
+  } = state;
+
+  const filterByStatus = useCallback(() => {
+    return statusFilter === "completed"
+      ? todos.filter((todo) => todo.completed)
+      : statusFilter === "remaining"
+      ? todos.filter((todo) => !todo.completed)
+      : todos;
+  }, [statusFilter, todos]);
+
+  const filterByPriority = useCallback(() => {
+    const todosFilteredByStatus = filterByStatus();
+
+    return !priorityFilters.length
+      ? todosFilteredByStatus
+      : todosFilteredByStatus.filter((a) =>
+          priorityFilters.includes(a.priority)
+        );
+  }, [filterByStatus, priorityFilters]);
 
   const toggleStatus = useCallback(
     (todoID: number, event: ChangeEvent<HTMLInputElement>) =>
       dispatch(
-        todosSlice.actions.statusToggled({
+        statusToggled({
           id: todoID,
           completed: event.target.checked,
         })
@@ -53,7 +48,7 @@ export const TodoList = memo(() => {
   const addPriority = useCallback(
     (todoID: number, event: ChangeEvent<HTMLSelectElement>) =>
       dispatch(
-        todosSlice.actions.priorityAdded({
+        priorityAdded({
           id: todoID,
           priority: event.target.value,
         })
@@ -62,13 +57,13 @@ export const TodoList = memo(() => {
   );
 
   const deleteTodo = useCallback(
-    (todoID: number) => dispatch(todosSlice.actions.deleted(todoID)),
+    (todoID: number) => dispatch(deleted(todoID)),
     [dispatch]
   );
 
   return (
     <TodoListContainer>
-      {filteredArray.map((todo: ITodosDetails) => (
+      {filterByPriority().map((todo: ITodosDetails) => (
         <TodoItem
           key={todo.id}
           todoName={todo.name}

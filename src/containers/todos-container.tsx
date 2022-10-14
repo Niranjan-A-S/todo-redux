@@ -5,7 +5,7 @@ import { TodoList, Toolbar } from ".";
 
 import { InputField } from "../components";
 import { TITLE } from "../enums";
-import { todosSlice } from "../redux/features/todos/todos-slice";
+import { added } from "../redux/features/todos";
 import { StoreDispatch } from "../types";
 
 export const TodosContainer = () => {
@@ -20,7 +20,7 @@ export const TodosContainer = () => {
     (event: { key: string }) => {
       todoName &&
         event.key === "Enter" &&
-        dispatch(todosSlice.actions.added(todoName)) &&
+        dispatch(added(todoName)) &&
         setTodoName("");
     },
     [dispatch, todoName]

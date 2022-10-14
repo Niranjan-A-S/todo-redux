@@ -17,7 +17,7 @@ export const todosSlice = createSlice({
           id: state.todos.length + 1,
           name: action.payload,
           completed: false,
-          priority:""
+          priority: "",
         },
       ];
     },
@@ -54,3 +54,14 @@ export const todosSlice = createSlice({
     },
   },
 });
+
+export const {
+  added,
+  clearCompleted,
+  deleted,
+  markCompleted,
+  priorityAdded,
+  statusToggled,
+} = todosSlice.actions;
+
+export const todosReducer = todosSlice.reducer;

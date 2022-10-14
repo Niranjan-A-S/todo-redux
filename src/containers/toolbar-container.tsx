@@ -11,15 +11,15 @@ import {
   StatusOptionLabels,
   StatusOptionValues,
 } from "../enums";
-import { filterSlice } from "../redux/features/filters/filter-slice";
-import { todosSlice } from "../redux/features/todos/todos-slice";
-import { customUseSelector, StoreDispatch } from "../types";
 
-const statusFilterOptions = [
-  { label: StatusOptionLabels.ALL, value: StatusOptionValues.ALL },
-  { label: StatusOptionLabels.REMAINING, value: StatusOptionValues.REMAINING },
-  { label: StatusOptionLabels.COMPLETED, value: StatusOptionValues.COMPLETED },
-];
+import {
+  toggleStatus,
+  addPriorityFilters,
+  removePriorityFilters,
+} from "../redux/features/filters";
+
+import { markCompleted } from "../redux/features/todos";
+import { customUseSelector, StoreDispatch } from "../types";
 
 export const Toolbar = memo(() => {
   const completedTodosCount = customUseSelector(
@@ -51,28 +51,37 @@ export const Toolbar = memo(() => {
     },
   ];
 
+  const statusFilters = [
+    { label: StatusOptionLabels.ALL, value: StatusOptionValues.ALL },
+    {
+      label: StatusOptionLabels.REMAINING,
+      value: StatusOptionValues.REMAINING,
+    },
+    {
+      label: StatusOptionLabels.COMPLETED,
+      value: StatusOptionValues.COMPLETED,
+    },
+  ];
+
   const markAllCompleted = useCallback(() => {
-    dispatch(todosSlice.actions.markCompleted());
+    dispatch(markCompleted());
   }, [dispatch]);
 
-  const clearCompleted = useCallback(
-    () => dispatch(todosSlice.actions.clearCompleted()),
-    [dispatch]
-  );
+  const clearCompleted = useCallback(() => {
+    dispatch(clearCompleted());
+  }, [dispatch]);
 
   const addStatusFilter = useCallback(
     (event: ChangeEvent<HTMLSelectElement>) =>
-      dispatch(filterSlice.actions.toggleStatus(event.target.value)),
+      dispatch(toggleStatus(event.target.value)),
     [dispatch]
   );
 
   const addPriorityFilters = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       event.target.checked
-        ? dispatch(filterSlice.actions.addPriorityFilters(event.target.value))
-        : dispatch(
-            filterSlice.actions.removePriorityFilters(event.target.value)
-          );
+        ? dispatch(addPriorityFilters(event.target.value))
+        : dispatch(removePriorityFilters(event.target.value));
     },
     [dispatch]
   );
@@ -92,10 +101,7 @@ export const Toolbar = memo(() => {
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Status</strong>
-        <SelectField
-          selectOptions={statusFilterOptions}
-          onChange={addStatusFilter}
-        />
+        <SelectField selectOptions={statusFilters} onChange={addStatusFilter} />
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Priority</strong>

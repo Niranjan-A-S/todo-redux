@@ -10,7 +10,7 @@ export interface ITodosDetails {
   id: number;
   name: string;
   completed: boolean;
-  priority:string;
+  priority: string;
 }
 
 export interface IOption {
@@ -22,8 +22,6 @@ export interface IFiltersInitialState {
   statusFilter: string;
   priorityFilters: Array<string>;
 }
-
-
 
 export type RootState = ReturnType<typeof store.getState>;
 

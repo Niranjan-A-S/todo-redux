@@ -4,21 +4,30 @@ import { IFiltersInitialState } from "../../../types";
 
 const initialState: IFiltersInitialState = {
   statusFilter: "all",
-  priorityFilters: []
+  priorityFilters: [],
 };
 
 export const filterSlice = createSlice({
   name: "filter",
   initialState,
   reducers: {
-    toggleStatus: (state, action:PayloadAction<string>) => {
+    toggleStatus: (state, action: PayloadAction<string>) => {
       state.statusFilter = action.payload;
     },
-  addPriorityFilters:( state,action:PayloadAction<string>) => {
-    state.priorityFilters = !state.priorityFilters.includes(action.payload) ? [...state.priorityFilters,action.payload] : state.priorityFilters 
-  },
-  removePriorityFilters:(state,action:PayloadAction<string>) => {
-    state.priorityFilters = state.priorityFilters.includes(action.payload) ? state.priorityFilters.filter(item => item !== action.payload )  :state.priorityFilters
-  }
+    addPriorityFilters: (state, action: PayloadAction<string>) => {
+      state.priorityFilters = !state.priorityFilters.includes(action.payload)
+        ? [...state.priorityFilters, action.payload]
+        : state.priorityFilters;
+    },
+    removePriorityFilters: (state, action: PayloadAction<string>) => {
+      state.priorityFilters = state.priorityFilters.includes(action.payload)
+        ? state.priorityFilters.filter((item) => item !== action.payload)
+        : state.priorityFilters;
+    },
   },
 });
+
+export const { addPriorityFilters, removePriorityFilters, toggleStatus } =
+  filterSlice.actions;
+
+export const filterReducer = filterSlice.reducer;
