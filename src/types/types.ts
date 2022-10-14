@@ -20,7 +20,7 @@ export interface IOption {
 
 export interface IFiltersInitialState {
   statusFilter: string;
-  priorityFilter: Array<string>;
+  priorityFilters: Array<string>;
 }
 
 

@@ -4,7 +4,7 @@ import { IFiltersInitialState } from "../../../types";
 
 const initialState: IFiltersInitialState = {
   statusFilter: "all",
-  priorityFilter: []
+  priorityFilters: []
 };
 
 export const filterSlice = createSlice({
@@ -15,10 +15,10 @@ export const filterSlice = createSlice({
       state.statusFilter = action.payload;
     },
   addPriorityFilters:( state,action:PayloadAction<string>) => {
-    state.priorityFilter = !state.priorityFilter.includes(action.payload) ? [...state.priorityFilter,action.payload] : state.priorityFilter 
+    state.priorityFilters = !state.priorityFilters.includes(action.payload) ? [...state.priorityFilters,action.payload] : state.priorityFilters 
   },
   removePriorityFilters:(state,action:PayloadAction<string>) => {
-    state.priorityFilter = state.priorityFilter.includes(action.payload) ? state.priorityFilter.filter(item => item !== action.payload )  :state.priorityFilter
+    state.priorityFilters = state.priorityFilters.includes(action.payload) ? state.priorityFilters.filter(item => item !== action.payload )  :state.priorityFilters
   }
   },
 });

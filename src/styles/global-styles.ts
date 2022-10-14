@@ -15,4 +15,9 @@ export const GlobalStyles = createGlobalStyle`
     button {
         cursor: pointer;
     }
+    img {
+        height: 70px;
+        width: 70px;
+        text-align: center;
+    }
 `;

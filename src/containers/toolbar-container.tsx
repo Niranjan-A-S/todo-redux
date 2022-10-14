@@ -21,7 +21,7 @@ const statusFilterOptions = [
   { label: StatusOptionLabels.COMPLETED, value: StatusOptionValues.COMPLETED },
 ];
 
-export const ToolbarContainer = memo(() => {
+export const Toolbar = memo(() => {
   const completedTodosCount = customUseSelector(
     (state) => state.todo.todos.filter((todo) => !todo.completed).length
   );
@@ -31,16 +31,23 @@ export const ToolbarContainer = memo(() => {
   const suffix = completedTodosCount === 1 ? "" : "s";
 
   const priorityFilters = [
-    { id: 1, label: PriorityOptionLabels.LOW, color: PriorityOptionColors.LOW },
+    {
+      id: 1,
+      label: PriorityOptionLabels.LOW,
+      color: PriorityOptionColors.LOW,
+      value: PriorityOptionValues.LOW,
+    },
     {
       id: 2,
       label: PriorityOptionLabels.MODERATE,
       color: PriorityOptionColors.MODERATE,
+      value: PriorityOptionValues.MODERATE,
     },
     {
       id: 3,
       label: PriorityOptionLabels.HIGH,
       color: PriorityOptionColors.HIGH,
+      value: PriorityOptionValues.HIGH,
     },
   ];
 
@@ -53,59 +60,25 @@ export const ToolbarContainer = memo(() => {
     [dispatch]
   );
 
-  const filterByStatus = useCallback(
+  const addStatusFilter = useCallback(
     (event: ChangeEvent<HTMLSelectElement>) =>
       dispatch(filterSlice.actions.toggleStatus(event.target.value)),
     [dispatch]
   );
 
   const addPriorityFilters = useCallback(
-    (event: ChangeEvent<HTMLInputElement>, label: string) => {
-      switch (label) {
-        case PriorityOptionLabels.LOW:
-          event.target.checked
-            ? dispatch(
-                filterSlice.actions.addPriorityFilters(PriorityOptionValues.LOW)
-              )
-            : dispatch(
-                filterSlice.actions.removePriorityFilters(
-                  PriorityOptionValues.LOW
-                )
-              );
-          break;
-        case PriorityOptionLabels.MODERATE:
-          event.target.checked
-            ? dispatch(
-                filterSlice.actions.addPriorityFilters(
-                  PriorityOptionValues.MODERATE
-                )
-              )
-            : dispatch(
-                filterSlice.actions.removePriorityFilters(
-                  PriorityOptionValues.MODERATE
-                )
-              );
-          break;
-        case PriorityOptionLabels.HIGH:
-          event.target.checked
-            ? dispatch(
-                filterSlice.actions.addPriorityFilters(
-                  PriorityOptionValues.HIGH
-                )
-              )
-            : dispatch(
-                filterSlice.actions.removePriorityFilters(
-                  PriorityOptionValues.HIGH
-                )
-              );
-          break;
-      }
+    (event: ChangeEvent<HTMLInputElement>) => {
+      event.target.checked
+        ? dispatch(filterSlice.actions.addPriorityFilters(event.target.value))
+        : dispatch(
+            filterSlice.actions.removePriorityFilters(event.target.value)
+          );
     },
     [dispatch]
   );
 
   return (
-    <ToolbarWrapper>
+    <ToolbarContainer>
       <ToolsWrapper>
         <strong>Actions</strong>
         <ToolbarButton text={"Mark All Finished"} onClick={markAllCompleted} />
@@ -121,7 +94,7 @@ export const ToolbarContainer = memo(() => {
         <strong>Filter by Status</strong>
         <SelectField
           selectOptions={statusFilterOptions}
-          onChange={filterByStatus}
+          onChange={addStatusFilter}
         />
       </ToolsWrapper>
       <ToolsWrapper>
@@ -131,19 +104,20 @@ export const ToolbarContainer = memo(() => {
             <FilterWrapper key={priority.id}>
               <label style={{ color: priority.color }}>{priority.label}</label>
               <input
+                value={priority.value}
                 key={priority.label}
                 type={"checkbox"}
-                onChange={(event) => addPriorityFilters(event, priority.label)}
+                onChange={addPriorityFilters}
               />
             </FilterWrapper>
           );
         })}
       </ToolsWrapper>
-    </ToolbarWrapper>
+    </ToolbarContainer>
   );
 });
 
-const ToolbarWrapper = styled.div`
+const ToolbarContainer = styled.div`
   padding: 10px 0;
   display: flex;
   justify-content: space-around;
