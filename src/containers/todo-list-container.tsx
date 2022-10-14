@@ -13,22 +13,29 @@ export const TodoList = memo(() => {
 
   const { priorityFilters, statusFilter } = filters;
 
-  // console.log(statusFilter);
+  const filterTodosByStatus = useCallback(() => {
+    switch (statusFilter) {
+      case "completed":
+        return todosArray.filter((todo) => todo.completed);
+      case "remaining":
+        return todosArray.filter((todo) => !todo.completed);
+      default:
+        return todosArray;
+    }
+  }, [statusFilter, todosArray]);
 
-  const filter = useCallback(
-    (array: ITodosDetails[]) => {
-      return array.reduce((acc: any, todo) => {
-        return statusFilter === "remaining"
-          ? [...acc, [...array.filter((todo) => !todo.completed)]]
-          : statusFilter === "completed"
-          ? [...acc, [...array.filter((todo) => todo.completed)]]
-          : [...acc, todo];
-      }, []);
-    },
-    [statusFilter]
-  );
+  const filteredArrayByStatus = filterTodosByStatus();
 
-  const newArray = filter(todosArray);
+  const filterArrayByPriority = useCallback(() => {
+    if (!priorityFilters.length) {
+      return filteredArrayByStatus;
+    }
+    return filteredArrayByStatus.filter((a) =>
+      priorityFilters.includes(a.priority)
+    );
+  }, [filteredArrayByStatus, priorityFilters]);
+
+  const filteredArray = filterArrayByPriority();
 
   const dispatch = useDispatch<StoreDispatch>();
 
@@ -61,7 +68,7 @@ export const TodoList = memo(() => {
 
   return (
     <TodoListContainer>
-      {newArray.map((todo: ITodosDetails) => (
+      {filteredArray.map((todo: ITodosDetails) => (
         <TodoItem
           key={todo.id}
           todoName={todo.name}

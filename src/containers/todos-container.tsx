@@ -1,8 +1,8 @@
 import { ChangeEvent, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { TodoList, Toolbar } from ".";
 
-import { TodosList, ToolbarContainer } from ".";
 import { InputField } from "../components";
 import { TITLE } from "../enums";
 import { todosSlice } from "../redux/features/todos/todos-slice";
@@ -35,8 +35,8 @@ export const TodosContainer = () => {
           onChange={handleChange}
           onKeyDown={addProject}
         />
-        <TodosList />
-        <ToolbarContainer />
+        <TodoList />
+        <Toolbar />
       </TodosContainerStyled>
     </>
   );
