@@ -28,8 +28,8 @@ export const Toolbar = memo(() => {
     todo: { todos },
   } = state;
 
-  const completedTodosCount = todos.length;
-  const suffix = completedTodosCount === 1 ? "" : "s";
+  const count = todos.filter((todo) => !todo.completed).length;
+  const suffix = count === 1 ? "" : "s";
 
   const priorityFilters = [
     {
@@ -97,7 +97,7 @@ export const Toolbar = memo(() => {
       <ToolsWrapper>
         <strong>Remaining Todos</strong>
         <p>
-          <strong>{completedTodosCount}</strong> item{suffix} left
+          <strong>{count}</strong> item{suffix} left
         </p>
       </ToolsWrapper>
       <ToolsWrapper>

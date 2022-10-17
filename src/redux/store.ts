@@ -17,4 +17,7 @@ export type StoreDispatch = typeof store.dispatch;
 
 export const customUseSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export const { filter, todo } = store.getState();
+export const {
+  filter: { priorityFilters, statusFilter },
+  todo: { todos },
+} = store.getState();
