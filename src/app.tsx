@@ -9,10 +9,9 @@ export const App = () => {
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to={"/entry-form"} />}>
-            <Route path="entry-form" element={<FormPage />} />
-            <Route path="todos" element={<TodosPage />} />
-          </Route>
+          <Route path="/" element={<Navigate to={"entry-form"} />} />
+          <Route path="entry-form" element={<FormPage />} />
+          <Route path="todos" element={<TodosPage />} />
         </Routes>
       </BrowserRouter>
     </Provider>
