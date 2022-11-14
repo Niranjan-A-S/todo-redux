@@ -2,7 +2,26 @@ import { IProjectFormData, IProjectsInitialState } from "../../../types/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: IProjectsInitialState = {
-  projects: [],
+  projects: [
+    {
+      id: 1,
+      projectName: "Project Organizer using Redux",
+      completed: false,
+      priority: "high",
+    },
+    {
+      id: 2,
+      projectName: "News Application built on Alan AI",
+      completed: false,
+      priority: "low",
+    },
+    {
+      id: 3,
+      projectName: "Weather App",
+      completed: false,
+      priority: "moderate",
+    },
+  ],
 };
 
 export const projectSlice = createSlice({

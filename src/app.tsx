@@ -1,7 +1,8 @@
 import { Provider } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { ProjectForm } from "./components";
+import { ProjectsPage } from "./pages";
 
-import { FormPage, ProjectsPage } from "./pages";
 import { store } from "./redux";
 
 export const App = () => {
@@ -9,9 +10,10 @@ export const App = () => {
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to={"projects-form"} />} />
-          <Route path="projects-form" element={<FormPage />} />
-          <Route path="projects" element={<ProjectsPage />} />
+          <Route path="/" element={<Navigate to={"projects"} />} />
+          <Route path="projects" element={<ProjectsPage />}>
+            s <Route path="form" element={<ProjectForm />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </Provider>

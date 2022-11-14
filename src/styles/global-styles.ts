@@ -8,16 +8,9 @@ export const GlobalStyles = createGlobalStyle`
     }
     body{
         font-family: Arial, Helvetica, sans-serif;
-        height: 100%;
-        background-color: #F5F5F5;
-        position: relative;
+        /* background-color: #F5F5F5; */
     }
     button {
         cursor: pointer;
-    }
-    img {
-        height: 70px;
-        width: 70px;
-        text-align: center;
     }
 `;

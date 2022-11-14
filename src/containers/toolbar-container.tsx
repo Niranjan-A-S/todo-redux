@@ -123,7 +123,6 @@ export const Toolbar = memo(() => {
           );
         })}
       </ToolsWrapper>
-      <AddButton>Add more projects...</AddButton>
     </ToolbarContainer>
   );
 });
@@ -148,14 +147,4 @@ const ToolsWrapper = styled.div`
 const FilterWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const AddButton = styled.button`
-  background-color: #f5f5f5;
-  border: none;
-  font-size: 20px;
-  background: #764abc;
-  color: #fff;
-  grid-column: 2/4;
-  padding: 5px 0;
 `;

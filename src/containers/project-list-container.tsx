@@ -50,7 +50,7 @@ export const ProjectList = memo(() => {
   );
 
   return (
-    <TodoListContainer>
+    <ProjectsListContainer>
       {filterByPriority().map((project: IProjectDetails) => (
         <ProjectItem
           key={project.id}
@@ -59,14 +59,12 @@ export const ProjectList = memo(() => {
           projectInfo={project}
         />
       ))}
-    </TodoListContainer>
+    </ProjectsListContainer>
   );
 });
 
-const TodoListContainer = styled.div`
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  border-top: 1px solid rgba(0, 0, 0, 0.3);
-  height: 420px;
+const ProjectsListContainer = styled.div`
+  border: 1px solid rgba(0, 0, 0, 0.3);
   overflow-x: auto;
   overflow-y: auto;
 `;
