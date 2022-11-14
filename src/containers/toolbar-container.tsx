@@ -2,7 +2,6 @@ import { ChangeEvent, memo, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import { SelectField } from "../common";
 import { ToolbarButton } from "../components";
 import {
   PriorityOptionColors,
@@ -18,17 +17,15 @@ import {
   statusToggled,
 } from "../redux/features/filters";
 
-import { clearCompleted, markCompleted } from "../redux/features/todos";
+import { clearCompleted, markCompleted } from "../redux/features/projects";
 
 export const Toolbar = memo(() => {
   const dispatch = useDispatch<StoreDispatch>();
-  const state = customUseSelector((state) => state);
-
   const {
-    todo: { todos },
-  } = state;
+    project: { projects },
+  } = customUseSelector((state) => state);
 
-  const count = todos.filter((todo) => !todo.completed).length;
+  const count = projects.filter((todo) => !todo.completed).length;
   const suffix = count === 1 ? "" : "s";
 
   const priorityFilters = [
@@ -95,14 +92,20 @@ export const Toolbar = memo(() => {
         <ToolbarButton text={"Clear Finished"} onClick={handleSubmitClear} />
       </ToolsWrapper>
       <ToolsWrapper>
-        <strong>Remaining Todos</strong>
+        <strong>Remaining Projects</strong>
         <p>
           <strong>{count}</strong> item{suffix} left
         </p>
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Status</strong>
-        <SelectField selectOptions={statusFilters} onChange={toggleStatus} />
+        <select onChange={toggleStatus}>
+          {statusFilters.map(({ label, value }) => (
+            <option key={value} value={value}>
+              {value}
+            </option>
+          ))}
+        </select>
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Priority</strong>
@@ -120,16 +123,18 @@ export const Toolbar = memo(() => {
           );
         })}
       </ToolsWrapper>
+      <AddButton>Add more projects...</AddButton>
     </ToolbarContainer>
   );
 });
 
 const ToolbarContainer = styled.div`
   padding: 10px 0;
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-row-gap: 10px;
   overflow-x: auto;
-  height: 130px;
+  height: 190px;
 `;
 
 const ToolsWrapper = styled.div`
@@ -137,9 +142,20 @@ const ToolsWrapper = styled.div`
   flex-direction: column;
   text-align: center;
   gap: 10px;
+  padding: 10px;
 `;
 
 const FilterWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const AddButton = styled.button`
+  background-color: #f5f5f5;
+  border: none;
+  font-size: 20px;
+  background: #764abc;
+  color: #fff;
+  grid-column: 2/4;
+  padding: 5px 0;
 `;

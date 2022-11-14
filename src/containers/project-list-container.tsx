@@ -1,28 +1,27 @@
 import { useCallback, ChangeEvent, memo } from "react";
 import { useDispatch } from "react-redux";
+
 import styled from "styled-components";
-import { TodoItem } from "../components";
+import { ProjectItem } from "../components";
 import { customUseSelector, StoreDispatch } from "../redux";
+import { deleted, statusToggled } from "../redux/features/projects";
+import { IProjectDetails } from "../types";
 
-import { deleted, priorityAdded, statusToggled } from "../redux/features/todos";
-import { ITodosDetails } from "../types";
-
-export const TodoList = memo(() => {
+export const ProjectList = memo(() => {
   const dispatch = useDispatch<StoreDispatch>();
-  const state = customUseSelector((state) => state);
 
   const {
     filter: { priorityFilters, statusFilter },
-    todo: { todos },
-  } = state;
+    project: { projects },
+  } = customUseSelector((state) => state);
 
   const filterByStatus = useCallback(() => {
     return statusFilter === "completed"
-      ? todos.filter((todo) => todo.completed)
+      ? projects.filter((project) => project.completed)
       : statusFilter === "remaining"
-      ? todos.filter((todo) => !todo.completed)
-      : todos;
-  }, [statusFilter, todos]);
+      ? projects.filter((project) => !project.completed)
+      : projects;
+  }, [statusFilter, projects]);
 
   const filterByPriority = useCallback(() => {
     const todosFilteredByStatus = filterByStatus();
@@ -45,17 +44,6 @@ export const TodoList = memo(() => {
     [dispatch]
   );
 
-  const addPriority = useCallback(
-    (todoID: number, event: ChangeEvent<HTMLSelectElement>) =>
-      dispatch(
-        priorityAdded({
-          id: todoID,
-          priority: event.target.value,
-        })
-      ),
-    [dispatch]
-  );
-
   const deleteTodo = useCallback(
     (todoID: number) => dispatch(deleted(todoID)),
     [dispatch]
@@ -63,16 +51,12 @@ export const TodoList = memo(() => {
 
   return (
     <TodoListContainer>
-      {filterByPriority().map((todo: ITodosDetails) => (
-        <TodoItem
-          key={todo.id}
-          todoID={todo.id}
-          todoName={todo.name}
+      {filterByPriority().map((project: IProjectDetails) => (
+        <ProjectItem
+          key={project.id}
           handleStatusChange={toggleStatus}
-          handlePriorityChange={addPriority}
           handleClick={deleteTodo}
-          checked={todo.completed}
-          priorityValue={todo.priority}
+          projectInfo={project}
         />
       ))}
     </TodoListContainer>
@@ -81,7 +65,8 @@ export const TodoList = memo(() => {
 
 const TodoListContainer = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  height: 350px;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  height: 420px;
   overflow-x: auto;
   overflow-y: auto;
 `;

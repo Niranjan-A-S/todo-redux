@@ -1,28 +1,27 @@
+import { IProjectFormData, IProjectsInitialState } from "../../../types/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { ITodosInitialState } from "../../../types";
-
-const initialState: ITodosInitialState = {
-  todos: [],
+const initialState: IProjectsInitialState = {
+  projects: [],
 };
 
-export const todosSlice = createSlice({
+export const projectSlice = createSlice({
   name: "todo",
   initialState,
   reducers: {
-    added: (state, action: PayloadAction<string>) => {
-      state.todos = [
-        ...state.todos,
+    added: (state, action: PayloadAction<IProjectFormData>) => {
+      state.projects = [
+        ...state.projects,
         {
-          id: state.todos.length + 1,
-          name: action.payload,
+          id: state.projects.length + 1,
+          projectName: action.payload.projectName,
           completed: false,
-          priority: "",
+          priority: action.payload.priority,
         },
       ];
     },
     statusToggled: (state, action: PayloadAction<any>) => {
-      state.todos = state.todos.map((todo) =>
+      state.projects = state.projects.map((todo) =>
         todo.id === action.payload.id &&
         todo.completed !== action.payload.completed
           ? {
@@ -33,24 +32,24 @@ export const todosSlice = createSlice({
       );
     },
     deleted: (state, action: PayloadAction<number>) => {
-      state.todos = state.todos.filter(
+      state.projects = state.projects.filter(
         (project) => project.id !== action.payload
       );
     },
     priorityAdded: (state, action: PayloadAction<any>) => {
-      state.todos = state.todos.map((todo) =>
+      state.projects = state.projects.map((todo) =>
         todo.id === action.payload.id
           ? { ...todo, priority: action.payload.priority }
           : todo
       );
     },
     markCompleted: (state) => {
-      state.todos = state.todos.map((todo) => {
+      state.projects = state.projects.map((todo) => {
         return { ...todo, completed: true };
       });
     },
     clearCompleted: (state) => {
-      state.todos = state.todos.filter((todo) => !todo.completed);
+      state.projects = state.projects.filter((todo) => !todo.completed);
     },
   },
 });
@@ -62,6 +61,6 @@ export const {
   markCompleted,
   priorityAdded,
   statusToggled,
-} = todosSlice.actions;
+} = projectSlice.actions;
 
-export const todosReducer = todosSlice.reducer;
+export const projectReducer = projectSlice.reducer;
