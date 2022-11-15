@@ -25,10 +25,14 @@ export const ProjectForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IProjectFormData>({});
+  } = useForm<IProjectFormData>({
+    defaultValues: { projectName: "", priority: "" },
+  });
 
-  const submitData: SubmitHandler<IProjectFormData> = (data) => {
-    const { priority, projectName } = data;
+  const submitData: SubmitHandler<IProjectFormData> = ({
+    priority,
+    projectName,
+  }) => {
     navigate("/projects");
     dispatch(added({ projectName, priority }));
   };
@@ -53,8 +57,9 @@ export const ProjectForm = () => {
               },
             })}
           />
-          {errors.projectName && <>{errors.projectName.message}</>}
+          {errors.projectName && <sup>{errors.projectName.message}</sup>}
         </FieldSection>
+
         <FieldSection>
           <label>Priority:</label>
           <SelectPriority {...register("priority")}>
@@ -65,6 +70,7 @@ export const ProjectForm = () => {
             ))}
           </SelectPriority>
         </FieldSection>
+
         <FormButton type="button" onClick={clearFields}>
           cancel
         </FormButton>
