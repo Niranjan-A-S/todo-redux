@@ -65,6 +65,8 @@ export const ProjectList = memo(() => {
 
 const ProjectsListContainer = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 10px 0;
+  height: 430px;
   overflow-x: auto;
   overflow-y: auto;
 `;

@@ -24,22 +24,23 @@ export const ProjectForm = () => {
   const { register, handleSubmit } = useForm<IProjectFormData>({});
 
   const submitData: SubmitHandler<IProjectFormData> = ({
-    projectName,
     priority,
+    projectName,
   }) => {
     navigate("/projects");
     dispatch(added({ projectName, priority }));
   };
 
-  const clearFields = () => {};
+  const clearFields = () => navigate(-1);
 
   return (
     <FormWrapper>
       <StyledForm onSubmit={handleSubmit(submitData)}>
         <ProjectNameField
-          type={"text"}
-          {...register("projectName")}
-          placeholder="Enter Project Name"
+          {...register("projectName", {
+            required: true,
+          })}
+          placeholder="Project Name"
         />
         <SelectPriority {...register("priority")}>
           {priorityOptions.map(({ label, value }) => (
@@ -49,7 +50,7 @@ export const ProjectForm = () => {
           ))}
         </SelectPriority>
         <FormButton type="button" onClick={clearFields}>
-          clear
+          cancel
         </FormButton>
         <FormButton type="submit">submit</FormButton>
       </StyledForm>
@@ -72,11 +73,9 @@ const StyledForm = styled.form`
   grid-template-columns: 1fr 1fr;
   grid-gap: 10px;
   background: #fff;
-  width: 500px;
+  width: 400px;
   padding: 10px;
-  position: absolute;
-  top: 300px;
-  left: 500px;
+  margin: 250px auto;
 `;
 
 const ProjectNameField = styled.input`

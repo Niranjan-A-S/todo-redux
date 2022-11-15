@@ -28,7 +28,6 @@ export const ProjectItem = (props: IProjectItem) => {
       <ProjectName children={projectName} />
       <ProjectPriority children={priority} />
       {/* have to fix the color thing  */}
-      <EditButton children={"✏️"} />
       <DeleteButton children={"❌"} onClick={() => handleClick(id)} />
     </ProjectItemWrapper>
   );
@@ -36,7 +35,7 @@ export const ProjectItem = (props: IProjectItem) => {
 
 const ProjectItemWrapper = styled.div`
   display: grid;
-  grid-template-columns: 0.7fr 8fr 2fr repeat(2, 1fr);
+  grid-template-columns: 0.7fr 8fr repeat(2, 1fr);
   padding: 10px;
   grid-column-gap: 5px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);

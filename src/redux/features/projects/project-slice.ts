@@ -11,7 +11,7 @@ const initialState: IProjectsInitialState = {
     },
     {
       id: 2,
-      projectName: "News Application built on Alan AI",
+      projectName: "News Application ",
       completed: false,
       priority: "low",
     },

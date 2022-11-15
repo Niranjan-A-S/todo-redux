@@ -12,7 +12,7 @@ export const App = () => {
         <Routes>
           <Route path="/" element={<Navigate to={"projects"} />} />
           <Route path="projects" element={<ProjectsPage />}>
-            s <Route path="form" element={<ProjectForm />} />
+            <Route path="form" element={<ProjectForm />} />
           </Route>
         </Routes>
       </BrowserRouter>
