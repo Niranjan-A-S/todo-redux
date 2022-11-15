@@ -21,12 +21,14 @@ export const ProjectForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<StoreDispatch>();
 
-  const { register, handleSubmit } = useForm<IProjectFormData>({});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IProjectFormData>({});
 
-  const submitData: SubmitHandler<IProjectFormData> = ({
-    priority,
-    projectName,
-  }) => {
+  const submitData: SubmitHandler<IProjectFormData> = (data) => {
+    const { priority, projectName } = data;
     navigate("/projects");
     dispatch(added({ projectName, priority }));
   };
@@ -36,19 +38,33 @@ export const ProjectForm = () => {
   return (
     <FormWrapper>
       <StyledForm onSubmit={handleSubmit(submitData)}>
-        <ProjectNameField
-          {...register("projectName", {
-            required: true,
-          })}
-          placeholder="Project Name"
-        />
-        <SelectPriority {...register("priority")}>
-          {priorityOptions.map(({ label, value }) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </SelectPriority>
+        <FieldSection>
+          <label>Project Name:</label>
+          <ProjectNameField
+            {...register("projectName", {
+              required: "Project name is required",
+              minLength: {
+                value: 5,
+                message: "Project name should be more than 4 characters",
+              },
+              maxLength: {
+                value: 30,
+                message: "Project name should not be more than 30 characters",
+              },
+            })}
+          />
+          {errors.projectName && <>{errors.projectName.message}</>}
+        </FieldSection>
+        <FieldSection>
+          <label>Priority:</label>
+          <SelectPriority {...register("priority")}>
+            {priorityOptions.map(({ label, value }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </SelectPriority>
+        </FieldSection>
         <FormButton type="button" onClick={clearFields}>
           cancel
         </FormButton>
@@ -78,8 +94,13 @@ const StyledForm = styled.form`
   margin: 250px auto;
 `;
 
-const ProjectNameField = styled.input`
+const FieldSection = styled.section`
   grid-column: 1/3;
+  display: grid;
+  grid-row-gap: 5px;
+`;
+
+const ProjectNameField = styled.input`
   font-size: 16px;
   padding: 10px;
 `;

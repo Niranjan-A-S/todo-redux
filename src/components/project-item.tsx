@@ -58,15 +58,6 @@ const ProjectPriority = styled.span`
   text-align: center;
 `;
 
-const EditButton = styled.button`
-  font-size: 20px;
-  background-color: #fff;
-  border: none;
-  &&:hover {
-    opacity: 0.5;
-  }
-`;
-
 const DeleteButton = styled.button`
   font-size: 20px;
   background-color: #fff;
