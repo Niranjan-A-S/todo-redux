@@ -1,15 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const Header = () => {
-  const navigate = useNavigate();
-
-  const displayForm = () => navigate("form");
-
   return (
     <HeaderWrapper>
       <Heading>Explore Your Projects...</Heading>
-      <AddButton onClick={displayForm}>Add New Project +</AddButton>
+      <Link to="form">
+        <AddButton>Add New Project +</AddButton>
+      </Link>
     </HeaderWrapper>
   );
 };
