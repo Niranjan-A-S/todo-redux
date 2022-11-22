@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { PriorityOptionLabels, PriorityOptionValues } from "../enums";
+import { PriorityOptionLabels, PriorityOptionValues } from "../data";
 import { StoreDispatch } from "../redux";
 import { added } from "../redux/features/projects";
 import { IProjectFormData } from "../types";

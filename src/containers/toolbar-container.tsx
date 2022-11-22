@@ -1,26 +1,12 @@
-import { ChangeEvent, memo, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { memo } from "react";
 import styled from "styled-components";
 
 import { ToolbarButton } from "../components";
-import {
-  PriorityOptionColors,
-  PriorityOptionLabels,
-  PriorityOptionValues,
-  StatusOptionLabels,
-  StatusOptionValues,
-} from "../enums";
-import { customUseSelector, StoreDispatch } from "../redux";
-import {
-  priorityFiltersAdded,
-  priorityFiltersRemoved,
-  statusToggled,
-} from "../redux/features/filters";
-
-import { clearCompleted, markCompleted } from "../redux/features/projects";
+import { statusFilters, priorityFilters } from "../data/filterValues";
+import { useProjectActions } from "../hooks";
+import { customUseSelector } from "../redux";
 
 export const Toolbar = memo(() => {
-  const dispatch = useDispatch<StoreDispatch>();
   const {
     project: { projects },
   } = customUseSelector((state) => state);
@@ -28,61 +14,12 @@ export const Toolbar = memo(() => {
   const count = projects.filter((todo) => !todo.completed).length;
   const suffix = count === 1 ? "" : "s";
 
-  const priorityFilters = [
-    {
-      id: 1,
-      label: PriorityOptionLabels.LOW,
-      color: PriorityOptionColors.LOW,
-      value: PriorityOptionValues.LOW,
-    },
-    {
-      id: 2,
-      label: PriorityOptionLabels.MODERATE,
-      color: PriorityOptionColors.MODERATE,
-      value: PriorityOptionValues.MODERATE,
-    },
-    {
-      id: 3,
-      label: PriorityOptionLabels.HIGH,
-      color: PriorityOptionColors.HIGH,
-      value: PriorityOptionValues.HIGH,
-    },
-  ];
-
-  const statusFilters = [
-    { label: StatusOptionLabels.ALL, value: StatusOptionValues.ALL },
-    {
-      label: StatusOptionLabels.REMAINING,
-      value: StatusOptionValues.REMAINING,
-    },
-    {
-      label: StatusOptionLabels.COMPLETED,
-      value: StatusOptionValues.COMPLETED,
-    },
-  ];
-
-  const handleSubmitMark = useCallback(() => {
-    dispatch(markCompleted());
-  }, [dispatch]);
-
-  const handleSubmitClear = useCallback(() => {
-    dispatch(clearCompleted());
-  }, [dispatch]);
-
-  const toggleStatus = useCallback(
-    (event: ChangeEvent<HTMLSelectElement>) =>
-      dispatch(statusToggled(event.target.value)),
-    [dispatch]
-  );
-
-  const togglePriority = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      event.target.checked
-        ? dispatch(priorityFiltersAdded(event.target.value))
-        : dispatch(priorityFiltersRemoved(event.target.value));
-    },
-    [dispatch]
-  );
+  const {
+    filterByStatus,
+    togglePriority,
+    handleSubmitClear,
+    handleSubmitMark,
+  } = useProjectActions();
 
   return (
     <ToolbarContainer>
@@ -92,30 +29,27 @@ export const Toolbar = memo(() => {
         <ToolbarButton text={"Clear Finished"} onClick={handleSubmitClear} />
       </ToolsWrapper>
       <ToolsWrapper>
-        <strong>Remaining Projects</strong>
         <p>
-          <strong>{count}</strong> item{suffix} left
+          Remaining <strong>{count}</strong> Project{suffix}
         </p>
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Status</strong>
-        <select onChange={toggleStatus}>
+        <select onChange={filterByStatus}>
           {statusFilters.map(({ label, value }) => (
-            <option key={value} value={value}>
-              {value}
-            </option>
+            <option key={value} value={value} children={value} />
           ))}
         </select>
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Priority</strong>
-        {priorityFilters.map((priority) => {
+        {priorityFilters.map(({ color, id, label, value }) => {
           return (
-            <FilterWrapper key={priority.id}>
-              <label style={{ color: priority.color }}>{priority.label}</label>
+            <FilterWrapper key={id}>
+              <label style={{ color: color }} children={label} />
               <input
-                value={priority.value}
-                key={priority.label}
+                value={value}
+                key={label}
                 type={"checkbox"}
                 onChange={togglePriority}
               />
@@ -133,7 +67,6 @@ const ToolbarContainer = styled.div`
   grid-template-columns: repeat(4, 1fr);
   grid-row-gap: 10px;
   overflow-x: auto;
-  height: 190px;
 `;
 
 const ToolsWrapper = styled.div`
