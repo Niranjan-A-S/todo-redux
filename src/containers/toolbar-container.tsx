@@ -29,9 +29,12 @@ export const Toolbar = memo(() => {
         <ToolbarButton text={"Clear Finished"} onClick={handleSubmitClear} />
       </ToolsWrapper>
       <ToolsWrapper>
-        <p>
-          Remaining <strong>{count}</strong> Project{suffix}
-        </p>
+        <strong>
+          Remaining
+          <p>
+            {count} Project{suffix}
+          </p>
+        </strong>
       </ToolsWrapper>
       <ToolsWrapper>
         <strong>Filter by Status</strong>
